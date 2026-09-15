@@ -1,0 +1,1981 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roblox Player Dashboard</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+    --blue:#00a2ff;
+    --blue2:#0074bd;
+    --bg:#080b10;
+    --panel:#11161e;
+    --panel2:#171d27;
+    --text:#fff;
+    --muted:#8b95a5;
+    --green:#48e58a;
+    --red:#ff4f5e;
+    --yellow:#ffd34d;
+    --border:#252d38;
+}
+
+body{
+    background:
+        radial-gradient(circle at top right,#06345255,transparent 35%),
+        radial-gradient(circle at bottom left,#001b2b55,transparent 35%),
+        var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button,input{
+    font:inherit;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:250px;
+    background:#0b0f15;
+    border-right:1px solid var(--border);
+    padding:22px 16px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    z-index:20;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:5px 10px 30px;
+}
+
+.logo-box{
+    width:34px;
+    height:34px;
+    background:white;
+    transform:rotate(45deg);
+    display:grid;
+    place-items:center;
+}
+
+.logo-box span{
+    width:13px;
+    height:13px;
+    background:#111;
+}
+
+.logo h1{
+    font-size:21px;
+    letter-spacing:1px;
+}
+
+.nav-title{
+    color:#586272;
+    font-size:11px;
+    margin:15px 10px 8px;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+}
+
+.nav-btn{
+    width:100%;
+    background:transparent;
+    color:#aab3c1;
+    padding:13px 14px;
+    border-radius:9px;
+    text-align:left;
+    margin-bottom:5px;
+    transition:.2s;
+    display:flex;
+    gap:12px;
+    align-items:center;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+    background:#151e28;
+    color:white;
+}
+
+.nav-btn.active{
+    box-shadow:inset 3px 0 var(--blue);
+}
+
+.side-bottom{
+    position:absolute;
+    left:16px;
+    right:16px;
+    bottom:20px;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:250px;
+    width:calc(100% - 250px);
+    padding:25px;
+}
+
+.topbar{
+    height:60px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.search{
+    width:min(440px,50%);
+    position:relative;
+}
+
+.search input{
+    width:100%;
+    background:#11161e;
+    color:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:12px 15px 12px 42px;
+    outline:none;
+}
+
+.search input:focus{
+    border-color:var(--blue);
+}
+
+.search-icon{
+    position:absolute;
+    left:15px;
+    top:11px;
+    color:#778293;
+}
+
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.icon-btn{
+    width:42px;
+    height:42px;
+    border-radius:9px;
+    background:#11161e;
+    color:white;
+    border:1px solid var(--border);
+    position:relative;
+}
+
+.icon-btn:hover{
+    border-color:#3c4a5b;
+    transform:translateY(-1px);
+}
+
+.notification-dot{
+    position:absolute;
+    width:8px;
+    height:8px;
+    background:var(--red);
+    border-radius:50%;
+    top:7px;
+    right:7px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* PROFILE */
+
+.profile{
+    background:
+        linear-gradient(120deg,#0d1d29,#101822 50%,#0b1119);
+    border:1px solid var(--border);
+    border-radius:14px;
+    overflow:hidden;
+    position:relative;
+    margin-bottom:20px;
+}
+
+.cover{
+    height:135px;
+    background:
+        linear-gradient(120deg,#0074bd88,#00a2ff22),
+        repeating-linear-gradient(
+            135deg,
+            transparent 0 18px,
+            #ffffff05 18px 20px
+        );
+}
+
+.profile-content{
+    display:flex;
+    align-items:flex-end;
+    padding:0 25px 22px;
+    margin-top:-45px;
+    gap:18px;
+}
+
+.avatar{
+    width:105px;
+    height:105px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#00a2ff,#005b91);
+    border:5px solid #101822;
+    display:grid;
+    place-items:center;
+    font-size:38px;
+    font-weight:bold;
+}
+
+.profile-info{
+    flex:1;
+}
+
+.welcome{
+    color:var(--blue);
+    font-size:12px;
+    font-weight:bold;
+    letter-spacing:1.5px;
+    margin-bottom:4px;
+}
+
+.profile-info h2{
+    font-size:28px;
+}
+
+.username{
+    color:var(--muted);
+    margin-top:3px;
+}
+
+.profile-actions{
+    display:flex;
+    gap:9px;
+}
+
+.primary,
+.secondary,
+.danger{
+    padding:11px 17px;
+    border-radius:8px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.primary{
+    color:white;
+    background:linear-gradient(135deg,var(--blue),var(--blue2));
+}
+
+.secondary{
+    background:#1b232e;
+    color:white;
+    border:1px solid var(--border);
+}
+
+.danger{
+    background:#38171b;
+    color:#ff8790;
+    border:1px solid #64262d;
+}
+
+.primary:hover,
+.secondary:hover,
+.danger:hover{
+    transform:translateY(-2px);
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:19px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:9px;
+}
+
+.stat-value{
+    font-size:25px;
+    font-weight:bold;
+}
+
+.stat-value.blue{
+    color:var(--blue);
+}
+
+.stat-value.green{
+    color:var(--green);
+}
+
+.stat-value.yellow{
+    color:var(--yellow);
+}
+
+/* GRID */
+
+.grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+}
+
+.panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.panel-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:17px;
+}
+
+.panel-head h3{
+    font-size:17px;
+}
+
+.small-btn{
+    color:var(--blue);
+    background:none;
+    font-size:12px;
+}
+
+/* GAMES */
+
+.games{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.game{
+    background:var(--panel2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    transition:.2s;
+    cursor:pointer;
+}
+
+.game:hover{
+    transform:translateY(-3px);
+    border-color:#354455;
+}
+
+.game-img{
+    height:105px;
+    display:grid;
+    place-items:center;
+    font-size:36px;
+    background:
+        linear-gradient(135deg,#0074bd,#111);
+}
+
+.game:nth-child(2) .game-img{
+    background:linear-gradient(135deg,#502900,#111);
+}
+
+.game:nth-child(3) .game-img{
+    background:linear-gradient(135deg,#315a26,#111);
+}
+
+.game:nth-child(4) .game-img{
+    background:linear-gradient(135deg,#69235e,#111);
+}
+
+.game-body{
+    padding:12px;
+}
+
+.game-body h4{
+    font-size:14px;
+}
+
+.game-body p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:5px;
+}
+
+.game-actions{
+    display:flex;
+    gap:7px;
+    margin-top:10px;
+}
+
+.game-actions button{
+    flex:1;
+    padding:8px;
+    border-radius:6px;
+    background:#202936;
+    color:white;
+    font-size:11px;
+}
+
+.game-actions button:first-child{
+    background:var(--blue2);
+}
+
+/* FRIENDS */
+
+.friend-list{
+    display:grid;
+    gap:10px;
+}
+
+.friend{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:9px;
+    border-radius:8px;
+}
+
+.friend:hover{
+    background:#171e28;
+}
+
+.friend-avatar{
+    width:39px;
+    height:39px;
+    border-radius:9px;
+    background:linear-gradient(135deg,#00a2ff,#222);
+    display:grid;
+    place-items:center;
+    font-weight:bold;
+}
+
+.friend-info{
+    flex:1;
+}
+
+.friend-info b{
+    font-size:13px;
+}
+
+.online{
+    color:var(--green);
+    font-size:10px;
+}
+
+.friend button{
+    padding:7px 9px;
+    background:#202936;
+    color:white;
+    border-radius:6px;
+    font-size:10px;
+}
+
+/* ACHIEVEMENTS */
+
+.achievement{
+    display:flex;
+    gap:12px;
+    padding:11px;
+    border-radius:8px;
+    background:#151b23;
+    margin-bottom:8px;
+}
+
+.badge{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    background:#252e3b;
+    display:grid;
+    place-items:center;
+    font-size:19px;
+}
+
+.achievement p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+/* AVATAR ITEMS */
+
+.items{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.item{
+    background:#171e28;
+    border:1px solid var(--border);
+    padding:12px;
+    border-radius:9px;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.item:hover{
+    border-color:var(--blue);
+    transform:translateY(-2px);
+}
+
+.item-icon{
+    height:65px;
+    display:grid;
+    place-items:center;
+    font-size:30px;
+}
+
+.item p{
+    font-size:11px;
+    color:#cbd2dc;
+}
+
+/* SEARCH PAGE */
+
+.game-search{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.game-search input{
+    flex:1;
+    background:#11161e;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:13px;
+    color:white;
+    outline:none;
+}
+
+/* FRIEND PAGE */
+
+.friend-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.friend-card{
+    background:#171e28;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px;
+    text-align:center;
+}
+
+.friend-card .friend-avatar{
+    width:65px;
+    height:65px;
+    margin:auto;
+    font-size:22px;
+}
+
+.friend-card h4{
+    margin-top:10px;
+}
+
+.friend-card p{
+    color:var(--muted);
+    font-size:11px;
+    margin:4px 0 12px;
+}
+
+/* SETTINGS */
+
+.setting{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.setting:last-child{
+    border-bottom:0;
+}
+
+.setting p{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:4px;
+}
+
+.toggle{
+    width:45px;
+    height:25px;
+    border-radius:20px;
+    background:#28313d;
+    position:relative;
+}
+
+.toggle.on{
+    background:var(--blue);
+}
+
+.toggle span{
+    position:absolute;
+    width:19px;
+    height:19px;
+    background:white;
+    border-radius:50%;
+    top:3px;
+    left:3px;
+    transition:.2s;
+}
+
+.toggle.on span{
+    left:23px;
+}
+
+/* MODAL */
+
+.modal-bg{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#000b;
+    backdrop-filter:blur(5px);
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal-bg.show{
+    display:flex;
+}
+
+.modal{
+    width:min(500px,100%);
+    background:#11161e;
+    border:1px solid #303b48;
+    border-radius:14px;
+    padding:23px;
+    box-shadow:0 20px 80px #000;
+}
+
+.modal h2{
+    margin-bottom:18px;
+}
+
+.form-group{
+    margin-bottom:13px;
+}
+
+.form-group label{
+    display:block;
+    color:#929dad;
+    font-size:11px;
+    margin-bottom:6px;
+}
+
+.form-group input{
+    width:100%;
+    padding:11px;
+    background:#080c11;
+    border:1px solid var(--border);
+    border-radius:7px;
+    color:white;
+    outline:none;
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:9px;
+    margin-top:20px;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#161e28;
+    border:1px solid #354252;
+    color:white;
+    padding:13px 17px;
+    border-radius:9px;
+    transform:translateY(100px);
+    opacity:0;
+    transition:.3s;
+    z-index:200;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:950px){
+    .sidebar{
+        width:75px;
+    }
+
+    .logo h1,
+    .nav-btn span,
+    .nav-title{
+        display:none;
+    }
+
+    .nav-btn{
+        justify-content:center;
+    }
+
+    .main{
+        margin-left:75px;
+        width:calc(100% - 75px);
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:650px){
+    .main{
+        padding:12px;
+    }
+
+    .topbar{
+        height:auto;
+    }
+
+    .search{
+        width:100%;
+    }
+
+    .top-actions{
+        display:none;
+    }
+
+    .profile-content{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .profile-actions{
+        width:100%;
+    }
+
+    .profile-actions button{
+        flex:1;
+    }
+
+    .games{
+        grid-template-columns:1fr;
+    }
+
+    .friend-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .items{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <div class="logo-box"><span></span></div>
+        <h1>ROBLOX</h1>
+    </div>
+
+    <div class="nav-title">Menu</div>
+
+    <button class="nav-btn active" onclick="showPage('dashboard',this)">
+        🏠 <span>Dashboard</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('games',this)">
+        🎮 <span>Games</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('friends',this)">
+        👥 <span>Friends</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('avatar',this)">
+        🧑 <span>Avatar</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('settings',this)">
+        ⚙️ <span>Settings</span>
+    </button>
+
+    <div class="side-bottom">
+        <button class="nav-btn" onclick="openProfile()">
+            ✏️ <span>Edit Profile</span>
+        </button>
+
+        <button class="nav-btn" onclick="resetData()">
+            🔄 <span>Reset Demo</span>
+        </button>
+    </div>
+
+</aside>
+
+
+<main class="main">
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+    <div class="search">
+        <span class="search-icon">🔎</span>
+        <input id="globalSearch"
+               placeholder="Search games, players..."
+               onkeydown="globalSearch(event)">
+    </div>
+
+    <div class="top-actions">
+
+        <button class="icon-btn" onclick="showNotifications()">
+            🔔
+            <span class="notification-dot" id="notificationDot"></span>
+        </button>
+
+        <button class="icon-btn" onclick="showRobux()">
+            R$
+        </button>
+
+        <button class="icon-btn" onclick="openProfile()">
+            👤
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard" class="page active">
+
+<div class="profile">
+
+    <div class="cover"></div>
+
+    <div class="profile-content">
+
+        <div class="avatar" id="avatarLetter">A</div>
+
+        <div class="profile-info">
+
+            <div class="welcome">WELCOME BACK</div>
+
+            <h2 id="displayName">Abhijay</h2>
+
+            <div class="username" id="username">@AbhijayPlayer</div>
+
+        </div>
+
+        <div class="profile-actions">
+
+            <button class="secondary" onclick="openProfile()">
+                Edit Profile
+            </button>
+
+            <button class="primary" onclick="launchRoblox()">
+                ▶ PLAY ROBLOX
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="stats">
+
+    <div class="stat">
+        <div class="stat-label">ACCOUNT LEVEL</div>
+        <div class="stat-value blue" id="level">126</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-label">ROBUX</div>
+        <div class="stat-value green" id="robux">4,850</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-label">FRIENDS</div>
+        <div class="stat-value" id="friendCount">84</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-label">BADGES</div>
+        <div class="stat-value yellow">37</div>
+    </div>
+
+</div>
+
+
+<div class="grid">
+
+<div>
+
+<div class="panel">
+
+<div class="panel-head">
+
+<h3>Recently Played</h3>
+
+<button class="small-btn"
+onclick="showPage('games',document.querySelectorAll('.nav-btn')[1])">
+VIEW ALL
+</button>
+
+</div>
+
+<div class="games" id="recentGames"></div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="panel-head">
+
+<h3>Avatar Items</h3>
+
+<button class="small-btn"
+onclick="showPage('avatar',document.querySelectorAll('.nav-btn')[3])">
+VIEW AVATAR
+</button>
+
+</div>
+
+<div class="items" id="dashboardItems"></div>
+
+</div>
+
+</div>
+
+
+<div>
+
+<div class="panel">
+
+<div class="panel-head">
+
+<h3>Friends Online</h3>
+
+<button class="small-btn"
+onclick="showPage('friends',document.querySelectorAll('.nav-btn')[2])">
+VIEW ALL
+</button>
+
+</div>
+
+<div class="friend-list" id="dashboardFriends"></div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Achievements</h3>
+</div>
+
+<div class="achievement">
+<div class="badge">🏆</div>
+<div>
+<b>Veteran Player</b>
+<p>You've been playing for years.</p>
+</div>
+</div>
+
+<div class="achievement">
+<div class="badge">🔥</div>
+<div>
+<b>On Fire</b>
+<p>Played 10 games this week.</p>
+</div>
+</div>
+
+<div class="achievement">
+<div class="badge">💎</div>
+<div>
+<b>Collector</b>
+<p>Collected 50 avatar items.</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= GAMES ================= -->
+
+<section id="games" class="page">
+
+<div class="panel">
+
+<div class="panel-head">
+<h2>🎮 Games</h2>
+<span id="gameResultCount"></span>
+</div>
+
+<div class="game-search">
+
+<input id="gameSearch"
+       placeholder="Search games..."
+       oninput="filterGames()">
+
+<button class="primary" onclick="filterGames()">
+SEARCH
+</button>
+
+</div>
+
+<div class="games" id="allGames"></div>
+
+</div>
+
+</section>
+
+
+<!-- ================= FRIENDS ================= -->
+
+<section id="friends" class="page">
+
+<div class="panel">
+
+<div class="panel-head">
+<h2>👥 Friends</h2>
+<button class="primary" onclick="addFriend()">＋ Add Friend</button>
+</div>
+
+<div class="friend-grid" id="allFriends"></div>
+
+</div>
+
+</section>
+
+
+<!-- ================= AVATAR ================= -->
+
+<section id="avatar" class="page">
+
+<div class="panel">
+
+<div class="panel-head">
+<h2>🧑 Avatar</h2>
+<button class="primary" onclick="randomAvatar()">🎲 Randomize</button>
+</div>
+
+<div class="profile" style="margin-bottom:20px">
+
+<div class="cover"></div>
+
+<div class="profile-content">
+
+<div class="avatar" id="bigAvatar">A</div>
+
+<div class="profile-info">
+<div class="welcome">YOUR AVATAR</div>
+<h2 id="avatarName">Abhijay</h2>
+<p class="username">Customize your look</p>
+</div>
+
+</div>
+
+</div>
+
+<h3 style="margin-bottom:15px">Your Items</h3>
+
+<div class="items" id="allItems"></div>
+
+</div>
+
+</section>
+
+
+<!-- ================= SETTINGS ================= -->
+
+<section id="settings" class="page">
+
+<div class="panel">
+
+<div class="panel-head">
+<h2>⚙️ Settings</h2>
+</div>
+
+<div class="setting">
+<div>
+<b>Desktop Notifications</b>
+<p>Show notifications for friend activity.</p>
+</div>
+<button class="toggle on" onclick="toggleSetting(this)">
+<span></span>
+</button>
+</div>
+
+<div class="setting">
+<div>
+<b>Online Status</b>
+<p>Allow friends to see when you're online.</p>
+</div>
+<button class="toggle on" onclick="toggleSetting(this)">
+<span></span>
+</button>
+</div>
+
+<div class="setting">
+<div>
+<b>Sound Effects</b>
+<p>Enable dashboard sound effects.</p>
+</div>
+<button class="toggle on" onclick="toggleSetting(this)">
+<span></span>
+</button>
+</div>
+
+<div class="setting">
+<div>
+<b>Compact Mode</b>
+<p>Use a smaller dashboard layout.</p>
+</div>
+<button class="toggle" onclick="toggleSetting(this)">
+<span></span>
+</button>
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>Account</h3>
+
+<div style="display:flex;gap:10px;margin-top:15px;flex-wrap:wrap">
+
+<button class="secondary" onclick="openProfile()">
+Edit Account
+</button>
+
+<button class="secondary" onclick="showToast('Privacy settings opened')">
+Privacy
+</button>
+
+<button class="danger" onclick="resetData()">
+Reset Demo Data
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- PROFILE MODAL -->
+
+<div class="modal-bg" id="profileModal">
+
+<div class="modal">
+
+<h2>✏️ Edit Profile</h2>
+
+<div class="form-group">
+<label>DISPLAY NAME</label>
+<input id="editDisplay">
+</div>
+
+<div class="form-group">
+<label>USERNAME</label>
+<input id="editUsername">
+</div>
+
+<div class="form-group">
+<label>ACCOUNT LEVEL</label>
+<input id="editLevel" type="number">
+</div>
+
+<div class="form-group">
+<label>ROBUX</label>
+<input id="editRobux" type="number">
+</div>
+
+<div class="modal-actions">
+
+<button class="secondary" onclick="closeModal()">
+Cancel
+</button>
+
+<button class="primary" onclick="saveProfile()">
+Save Changes
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- GENERAL MODAL -->
+
+<div class="modal-bg" id="generalModal">
+
+<div class="modal">
+
+<h2 id="modalTitle">Notification</h2>
+
+<div id="modalContent" style="color:#aab3c1;line-height:1.6"></div>
+
+<div class="modal-actions">
+
+<button class="primary" onclick="closeGeneralModal()">
+OK
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* ================= DATA ================= */
+
+const defaultData = {
+
+    displayName:"Abhijay",
+    username:"@AbhijayPlayer",
+    level:126,
+    robux:4850,
+
+    games:[
+        {
+            name:"Brookhaven RP",
+            icon:"🏡",
+            players:"500K+ playing"
+        },
+        {
+            name:"Blox Fruits",
+            icon:"⚔️",
+            players:"200K+ playing"
+        },
+        {
+            name:"Driving Empire",
+            icon:"🚗",
+            players:"80K+ playing"
+        },
+        {
+            name:"Adopt Me!",
+            icon:"🐶",
+            players:"300K+ playing"
+        }
+    ],
+
+    friends:[
+        "JayPro",
+        "Kaito",
+        "Mike",
+        "Raven",
+        "Xeno",
+        "Shadow"
+    ],
+
+    items:[
+        ["🕶️","Black Shades"],
+        ["🧥","Blue Hoodie"],
+        ["🙂","Classic Face"],
+        ["👑","Golden Crown"],
+        ["🪽","Blue Wings"],
+        ["🤖","Robot Head"]
+    ]
+};
+
+let data =
+    JSON.parse(localStorage.getItem("robloxPlayer"))
+    || structuredClone(defaultData);
+
+
+/* ================= STORAGE ================= */
+
+function saveData(){
+    localStorage.setItem(
+        "robloxPlayer",
+        JSON.stringify(data)
+    );
+}
+
+
+/* ================= RENDER ================= */
+
+function render(){
+
+    document.getElementById("displayName").textContent =
+        data.displayName;
+
+    document.getElementById("username").textContent =
+        data.username;
+
+    document.getElementById("avatarName").textContent =
+        data.displayName;
+
+    document.getElementById("avatarLetter").textContent =
+        data.displayName.charAt(0).toUpperCase();
+
+    document.getElementById("bigAvatar").textContent =
+        data.displayName.charAt(0).toUpperCase();
+
+    document.getElementById("level").textContent =
+        data.level;
+
+    document.getElementById("robux").textContent =
+        Number(data.robux).toLocaleString();
+
+    document.getElementById("friendCount").textContent =
+        data.friends.length + 78;
+
+    renderGames();
+    renderFriends();
+    renderItems();
+}
+
+
+/* ================= GAMES ================= */
+
+function renderGames(){
+
+    const recent = document.getElementById("recentGames");
+
+    recent.innerHTML = data.games.map((game,i)=>gameHTML(game,i)).join("");
+
+    document.getElementById("allGames").innerHTML =
+        data.games.map((game,i)=>gameHTML(game,i)).join("");
+
+    document.getElementById("gameResultCount").textContent =
+        data.games.length + " games";
+}
+
+
+function gameHTML(game,index){
+
+    return `
+    <div class="game">
+
+        <div class="game-img">
+            ${game.icon}
+        </div>
+
+        <div class="game-body">
+
+            <h4>${game.name}</h4>
+
+            <p>${game.players}</p>
+
+            <div class="game-actions">
+
+                <button onclick="playGame('${escapeJS(game.name)}')">
+                    ▶ PLAY
+                </button>
+
+                <button onclick="gameDetails('${escapeJS(game.name)}')">
+                    INFO
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>`;
+}
+
+
+function escapeJS(text){
+    return text.replace(/'/g,"\\'");
+}
+
+
+function playGame(name){
+
+    showToast("Launching " + name + "...");
+
+    /*
+      Roblox experiences normally require a valid
+      Roblox game/experience deep link to launch.
+      This opens Roblox's player protocol.
+    */
+
+    setTimeout(()=>{
+        try{
+            window.location.href = "roblox-player://";
+        }catch(e){
+            showToast("Open Roblox manually if the browser blocks the launch.");
+        }
+    },400);
+
+}
+
+
+function gameDetails(name){
+
+    openGeneralModal(
+        name,
+        `
+        <b>${name}</b><br><br>
+        🎮 Multiplayer experience<br>
+        👥 Thousands of players<br>
+        ⭐ Recommended for you<br><br>
+        This is a demo dashboard entry. Connect a legitimate Roblox backend/API for live game information.
+        `
+    );
+}
+
+
+/* ================= SEARCH ================= */
+
+function filterGames(){
+
+    const query =
+        document.getElementById("gameSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const filtered =
+        data.games.filter(g =>
+            g.name.toLowerCase().includes(query)
+        );
+
+    document.getElementById("allGames").innerHTML =
+        filtered.map((game,i)=>gameHTML(game,i)).join("");
+
+    document.getElementById("gameResultCount").textContent =
+        filtered.length + " result(s)";
+}
+
+
+function globalSearch(event){
+
+    if(event.key !== "Enter") return;
+
+    const query =
+        event.target.value.trim();
+
+    if(!query) return;
+
+    showPage(
+        "games",
+        document.querySelectorAll(".nav-btn")[1]
+    );
+
+    document.getElementById("gameSearch").value =
+        query;
+
+    filterGames();
+}
+
+
+/* ================= FRIENDS ================= */
+
+function renderFriends(){
+
+    const dashboard =
+        document.getElementById("dashboardFriends");
+
+    dashboard.innerHTML =
+        data.friends.slice(0,5).map(friend => `
+            <div class="friend">
+
+                <div class="friend-avatar">
+                    ${friend.charAt(0)}
+                </div>
+
+                <div class="friend-info">
+                    <b>${friend}</b>
+                    <div class="online">● Online</div>
+                </div>
+
+                <button onclick="messageFriend('${escapeJS(friend)}')">
+                    CHAT
+                </button>
+
+            </div>
+        `).join("");
+
+
+    document.getElementById("allFriends").innerHTML =
+        data.friends.map(friend => `
+            <div class="friend-card">
+
+                <div class="friend-avatar">
+                    ${friend.charAt(0)}
+                </div>
+
+                <h4>${friend}</h4>
+
+                <p>● Online now</p>
+
+                <button class="secondary"
+                    onclick="messageFriend('${escapeJS(friend)}')">
+                    Message
+                </button>
+
+                <button class="danger"
+                    style="margin-top:7px"
+                    onclick="removeFriend('${escapeJS(friend)}')">
+                    Remove
+                </button>
+
+            </div>
+        `).join("");
+}
+
+
+function messageFriend(name){
+
+    openGeneralModal(
+        "Message " + name,
+        `
+        <input
+            id="messageInput"
+            placeholder="Type your message..."
+            style="
+                width:100%;
+                padding:12px;
+                background:#080c11;
+                border:1px solid #252d38;
+                color:white;
+                border-radius:7px;
+            "
+        >
+        `
+    );
+}
+
+
+function removeFriend(name){
+
+    if(!confirm("Remove " + name + " from your friends?"))
+        return;
+
+    data.friends =
+        data.friends.filter(f => f !== name);
+
+    saveData();
+    render();
+
+    showToast(name + " removed");
+}
+
+
+function addFriend(){
+
+    const name =
+        prompt("Enter a player username:");
+
+    if(!name) return;
+
+    if(data.friends.includes(name)){
+        showToast("That player is already your friend.");
+        return;
+    }
+
+    data.friends.push(name);
+
+    saveData();
+    render();
+
+    showToast("Friend request sent to " + name);
+}
+
+
+/* ================= ITEMS ================= */
+
+function renderItems(){
+
+    const html =
+        data.items.map(item => `
+            <div class="item"
+                 onclick="equipItem('${escapeJS(item[1])}')">
+
+                <div class="item-icon">
+                    ${item[0]}
+                </div>
+
+                <p>${item[1]}</p>
+
+            </div>
+        `).join("");
+
+    document.getElementById("dashboardItems").innerHTML =
+        html;
+
+    document.getElementById("allItems").innerHTML =
+        html;
+}
+
+
+function equipItem(name){
+
+    showToast("Equipped " + name);
+}
+
+
+function randomAvatar(){
+
+    const random =
+        data.items[
+            Math.floor(Math.random()*data.items.length)
+        ];
+
+    document.getElementById("bigAvatar").textContent =
+        random[0];
+
+    showToast("Avatar randomized with " + random[1]);
+}
+
+
+/* ================= NAVIGATION ================= */
+
+function showPage(id,button){
+
+    document.querySelectorAll(".page")
+        .forEach(page =>
+            page.classList.remove("active")
+        );
+
+    document.getElementById(id)
+        .classList.add("active");
+
+    document.querySelectorAll(".nav-btn")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+    if(button)
+        button.classList.add("active");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* ================= PROFILE ================= */
+
+function openProfile(){
+
+    document.getElementById("editDisplay").value =
+        data.displayName;
+
+    document.getElementById("editUsername").value =
+        data.username.replace(/^@/,"");
+
+    document.getElementById("editLevel").value =
+        data.level;
+
+    document.getElementById("editRobux").value =
+        data.robux;
+
+    document.getElementById("profileModal")
+        .classList.add("show");
+}
+
+
+function saveProfile(){
+
+    const display =
+        document.getElementById("editDisplay").value.trim();
+
+    const username =
+        document.getElementById("editUsername").value.trim();
+
+    if(!display || !username){
+        showToast("Please fill in all required fields.");
+        return;
+    }
+
+    data.displayName = display;
+
+    data.username =
+        username.startsWith("@")
+        ? username
+        : "@" + username;
+
+    data.level =
+        Math.max(
+            1,
+            Number(document.getElementById("editLevel").value) || 1
+        );
+
+    data.robux =
+        Math.max(
+            0,
+            Number(document.getElementById("editRobux").value) || 0
+        );
+
+    saveData();
+    render();
+
+    closeModal();
+
+    showToast("Profile updated successfully!");
+}
+
+
+function closeModal(){
+
+    document.getElementById("profileModal")
+        .classList.remove("show");
+}
+
+
+/* ================= ROBUX ================= */
+
+function showRobux(){
+
+    openGeneralModal(
+        "💰 Robux Balance",
+        `
+        <div style="font-size:30px;font-weight:bold;color:#48e58a">
+            R$ ${Number(data.robux).toLocaleString()}
+        </div>
+        <br>
+        <p>Your current demo Robux balance.</p>
+        <br>
+        <button class="primary"
+            onclick="showToast('Robux purchase opened')">
+            Get More Robux
+        </button>
+        `
+    );
+}
+
+
+/* ================= NOTIFICATIONS ================= */
+
+function showNotifications(){
+
+    document.getElementById("notificationDot")
+        .style.display="none";
+
+    openGeneralModal(
+        "🔔 Notifications",
+        `
+        <b>Friend activity</b><br>
+        JayPro is playing Brookhaven RP.<br><br>
+
+        <b>Achievement</b><br>
+        You unlocked "On Fire".<br><br>
+
+        <b>System</b><br>
+        Your dashboard is up to date.
+        `
+    );
+}
+
+
+/* ================= MODALS ================= */
+
+function openGeneralModal(title,content){
+
+    document.getElementById("modalTitle")
+        .textContent=title;
+
+    document.getElementById("modalContent")
+        .innerHTML=content;
+
+    document.getElementById("generalModal")
+        .classList.add("show");
+}
+
+
+function closeGeneralModal(){
+
+    document.getElementById("generalModal")
+        .classList.remove("show");
+}
+
+
+/* ================= SETTINGS ================= */
+
+function toggleSetting(button){
+
+    button.classList.toggle("on");
+
+    const state =
+        button.classList.contains("on");
+
+    showToast(
+        state
+        ? "Setting enabled"
+        : "Setting disabled"
+    );
+}
+
+
+/* ================= ROBLOX LAUNCH ================= */
+
+function launchRoblox(){
+
+    showToast("Attempting to launch Roblox...");
+
+    setTimeout(()=>{
+
+        try{
+
+            window.location.href =
+                "roblox-player://";
+
+        }catch(error){
+
+            showToast(
+                "Your browser blocked the Roblox protocol."
+            );
+
+        }
+
+    },300);
+}
+
+
+/* ================= TOAST ================= */
+
+let toastTimer;
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(()=>{
+            toast.classList.remove("show");
+        },2800);
+}
+
+
+/* ================= RESET ================= */
+
+function resetData(){
+
+    if(!confirm(
+        "Reset the dashboard to the original demo data?"
+    )) return;
+
+    data =
+        structuredClone(defaultData);
+
+    saveData();
+    render();
+
+    showToast("Demo data reset.");
+}
+
+
+/* ================= CLOSE MODALS ================= */
+
+document
+    .querySelectorAll(".modal-bg")
+    .forEach(bg => {
+
+        bg.addEventListener("click",e=>{
+
+            if(e.target === bg){
+                bg.classList.remove("show");
+            }
+
+        });
+
+    });
+
+
+/* ================= START ================= */
+
+render();
+
+</script>
+
+</body>
+</html>
+```
